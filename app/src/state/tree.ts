@@ -1,4 +1,5 @@
 import type { BranchNode, Message } from './types'
+import { generateId } from 'ai'
 
 export type TreeState = {
   branches: Map<string, BranchNode>
@@ -47,7 +48,7 @@ export function forkBranch(state: TreeState, fromMessageId: string): BranchNode 
     id: crypto.randomUUID(),
     parentId: parentBranch.id,
     forkSeq: from.seq,
-    title: undefined,
+    title: generateId().slice(0, 6),
     createdAt: Date.now(),
   }
   state.branches.set(node.id, node)
@@ -96,4 +97,19 @@ export function getTranscript(state: TreeState, leafId: string): Message[] {
     }
   }
   return result
+}
+
+export function getChildren(state: TreeState, parentId: string): BranchNode[] {
+  const out: BranchNode[] = []
+  for (const b of state.branches.values()) {
+    if (b.parentId === parentId) out.push(b)
+  }
+  out.sort((a, b) => a.createdAt - b.createdAt)
+  return out
+}
+
+export function renameBranch(state: TreeState, id: string, title: string) {
+  const b = state.branches.get(id)
+  if (!b) throw new Error('Unknown branch id')
+  b.title = title
 }

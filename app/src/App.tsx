@@ -8,6 +8,7 @@ import type { RuntimeConfig } from './settings'
 import { streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
 import { DevPanel } from './components/DevPanel'
+import { BranchExplorer } from './components/BranchExplorer'
 
 function App() {
   const [openSettings, setOpenSettings] = useState(false)
@@ -16,6 +17,7 @@ function App() {
   const [cfg, setCfg] = useState<RuntimeConfig | null>(() => (persist ? loadConfig() : null))
   const [error, setError] = useState<string | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const [showExplorer, setShowExplorer] = useState(false)
   const tree = useTreeChat()
   const path = tree.path()
   const transcript = tree.transcript()
@@ -73,8 +75,16 @@ function App() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800/70 dark:bg-zinc-900/70">
-        <div className="container mx-auto flex max-w-3xl items-center justify-between p-4">
-          <h1 className="text-2xl font-semibold tracking-tight">TreeChat</h1>
+        <div className="container mx-auto flex max-w-6xl items-center justify-between p-4">
+          <div className="flex items-center gap-2">
+            <button
+              className="rounded-full bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 md:hidden"
+              onClick={() => setShowExplorer((v) => !v)}
+            >
+              Branches
+            </button>
+            <h1 className="text-2xl font-semibold tracking-tight">TreeChat</h1>
+          </div>
           <button
             className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
             onClick={() => setOpenSettings(true)}
@@ -84,35 +94,63 @@ function App() {
         </div>
       </header>
 
-      <main className="container mx-auto flex max-w-3xl flex-1 flex-col gap-6 p-6">
-        {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 shadow-sm dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
-            {error}
+      <main className="container mx-auto max-w-6xl flex-1 p-4 md:p-6">
+        {showExplorer && (
+          <div className="mb-4 md:hidden">
+            <BranchExplorer
+              path={path}
+              children={tree.children()}
+              activeId={tree.activeBranchId}
+              onSelect={(id) => {
+                tree.setActiveBranch(id)
+                setShowExplorer(false)
+              }}
+              onRename={(id, title) => tree.renameBranch(id, title)}
+            />
           </div>
         )}
 
-        <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
-          <Breadcrumbs
-            path={path.map((n) => ({ id: n.id, title: n.title ?? 'untitled' }))}
-            onSelect={(id) => tree.setActiveBranch(id)}
-          />
-        </div>
+        <div className="md:grid md:grid-cols-[minmax(220px,280px),1fr] md:gap-6">
+          <aside className="hidden md:block">
+            <BranchExplorer
+              path={path}
+              children={tree.children()}
+              activeId={tree.activeBranchId}
+              onSelect={(id) => tree.setActiveBranch(id)}
+              onRename={(id, title) => tree.renameBranch(id, title)}
+            />
+          </aside>
+          <section className="flex min-h-[60dvh] flex-col gap-6">
+          {error && (
+            <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 shadow-sm dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
+              {error}
+            </div>
+          )}
 
-        <div className="flex-1">
-          <MessageList messages={transcript} onFork={(id) => tree.fork(id)} />
-        </div>
+          <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+            <Breadcrumbs
+              path={path.map((n) => ({ id: n.id, title: n.title ?? 'untitled' }))}
+              onSelect={(id) => tree.setActiveBranch(id)}
+            />
+          </div>
 
-        <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/70">
-          <Composer
-            onSend={handleSend}
-            busy={busy}
-            onAbort={() => {
-              abortRef.current?.abort()
-            }}
-          />
-        </div>
+          <div className="flex-1">
+            <MessageList messages={transcript} onFork={(id) => tree.fork(id)} />
+          </div>
 
-        <DevPanel cfg={cfg} />
+          <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/70">
+            <Composer
+              onSend={handleSend}
+              busy={busy}
+              onAbort={() => {
+                abortRef.current?.abort()
+              }}
+            />
+          </div>
+
+          <DevPanel cfg={cfg} />
+          </section>
+        </div>
       </main>
 
       {openSettings && (

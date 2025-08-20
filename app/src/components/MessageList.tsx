@@ -41,20 +41,20 @@ export function MessageList({
                 }
               >
                 <div className="whitespace-pre-wrap leading-relaxed">{m.content}</div>
-                <div className="absolute -right-2 -top-2 opacity-0 transition-opacity group-hover:opacity-100">
-                  <button
-                    className={
-                      'rounded-full border px-2 py-0.5 text-[10px] font-medium shadow-sm transition ' +
-                      (isUser
-                        ? 'border-blue-400/50 bg-blue-500/20 text-white/90 hover:bg-blue-500/30'
-                        : 'border-indigo-200 bg-indigo-100/70 text-indigo-700 hover:bg-indigo-200 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:bg-zinc-800')
-                    }
-                    onClick={() => onFork?.(m.id)}
-                    title="Fork from here"
-                  >
-                    Fork
-                  </button>
-                </div>
+                {!isUser && (
+                  <div className="absolute -right-2 -top-2">
+                    <button
+                      className={
+                        'rounded-full border px-2 py-0.5 text-[10px] font-medium shadow-sm transition ' +
+                      'border-indigo-200 bg-indigo-100/70 text-indigo-700 hover:bg-indigo-200 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:bg-zinc-800'
+                      }
+                      onClick={() => onFork?.(m.id)}
+                      title="Fork from here"
+                    >
+                      Fork
+                    </button>
+                  </div>
+                )}
               </div>
               {isUser && (
                 <div className="flex h-7 w-7 select-none items-center justify-center rounded-full bg-blue-600 text-[10px] font-semibold uppercase text-white">

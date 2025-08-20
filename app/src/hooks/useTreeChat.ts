@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import type { BranchNode, Message } from '../state/types'
-import { appendMessage, createInitialState, forkBranch, getPath, getTranscript, setActiveBranch, updateMessageContent, type TreeState } from '../state/tree'
+import { appendMessage, createInitialState, forkBranch, getChildren, getPath, getTranscript, renameBranch, setActiveBranch, updateMessageContent, type TreeState } from '../state/tree'
 
 export function useTreeChat() {
   const [version, setVersion] = useState(0)
@@ -22,6 +22,9 @@ export function useTreeChat() {
       },
       transcript(): Message[] {
         return getTranscript(get(), get().activeBranchId)
+      },
+      children(): BranchNode[] {
+        return getChildren(get(), get().activeBranchId)
       },
       sendUser(content: string): Message {
         const msg = appendMessage(get(), {
@@ -51,6 +54,10 @@ export function useTreeChat() {
       },
       setActiveBranch(id: string) {
         setActiveBranch(get(), id)
+        bump()
+      },
+      renameBranch(id: string, title: string) {
+        renameBranch(get(), id, title)
         bump()
       },
     }
