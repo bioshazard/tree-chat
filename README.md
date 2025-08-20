@@ -4,6 +4,8 @@ Fork and branch in parallel!
 
 ## Quick Start
 
+*Note: Chats are NOT saved ANYWHERE yet. All chat history will be lost on refresh.*
+
 Visit https://tree.bios.dev
 
 Click Settings to add your BYOK to any OpenAI Compatible endpoint.

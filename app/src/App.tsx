@@ -102,12 +102,23 @@ function App() {
             </button>
             <h1 className="text-2xl font-semibold tracking-tight">TreeChat</h1>
           </div>
-          <button
-            className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
-            onClick={() => setOpenSettings(true)}
-          >
-            Settings
-          </button>
+          
+          <div className="flex items-center gap-2">
+            <a
+              href="https://github.com/bioshazard/tree-chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-zinc-300 px-3 py-1 text-sm shadow-sm transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+            >
+              GitHub
+            </a>
+            <button
+              className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+              onClick={() => setOpenSettings(true)}
+            >
+              Settings
+            </button>
+          </div>
         </div>
       </header>
 
