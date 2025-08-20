@@ -37,7 +37,7 @@ function App() {
       tree.setActiveBranch(next)
     }
   }
-  const transcript = tree.transcript()
+  // const transcript = tree.transcript()
 
   async function handleSend(content: string) {
     setError(null)
@@ -56,7 +56,7 @@ function App() {
         extraHeaders['HTTP-Referer'] = window.location.origin
         extraHeaders['X-Title'] = 'TreeChat Dev'
       }
-      const openai = createOpenAI({ baseURL: cfg.baseUrl, apiKey: cfg.apiKey, headers: extraHeaders, compatibility: 'strict' })
+      const openai = createOpenAI({ baseURL: cfg.baseUrl, apiKey: cfg.apiKey, headers: extraHeaders })
       const transcript = tree.transcript()
       // eslint-disable-next-line no-console
       console.debug('Streaming start', {
