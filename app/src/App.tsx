@@ -90,8 +90,8 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800/70 dark:bg-zinc-900/70">
+    <div className="flex min-h-dvh flex-col bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-900 dark:text-zinc-100">
+      <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:border-zinc-800/70 dark:bg-zinc-900/60">
         <div className="flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <button
@@ -153,7 +153,7 @@ function App() {
               </div>
             )}
 
-          <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+          <div className="rounded-xl border border-zinc-200/80 bg-white/70 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/60">
             <Breadcrumbs
               path={path.map((n) => ({ id: n.id, title: n.title ?? 'untitled' }))}
               onSelect={(id) => tree.setActiveBranch(id)}
@@ -165,7 +165,7 @@ function App() {
               const t = tree.transcriptFor(bid)
               const node = tree.branches.get(bid)
               return (
-                <div key={bid} className="flex min-w-0 flex-1 flex-col rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+                <div key={bid} className="flex min-w-0 flex-1 flex-col rounded-xl border border-zinc-200/80 bg-white/70 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/60">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <div className="truncate text-sm font-medium">{node?.title ?? 'untitled'}</div>
                     <div className="flex items-center gap-2">
@@ -199,7 +199,7 @@ function App() {
             })}
           </div>
 
-          <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/70">
+          <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/70 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800/80 dark:bg-zinc-900/60">
             <Composer
               onSend={handleSend}
               busy={busy}

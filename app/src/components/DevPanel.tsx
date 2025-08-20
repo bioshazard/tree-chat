@@ -122,7 +122,7 @@ export function DevPanel({ cfg }: { cfg: RuntimeConfig | null }) {
   }
 
   return (
-    <div className="mt-6 rounded-xl border border-zinc-200/80 bg-white/80 p-4 text-xs text-zinc-700 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70 dark:text-zinc-300">
+    <div className="mt-6 rounded-xl border border-zinc-200/80 bg-white/70 p-4 text-xs text-zinc-700 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-300">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Dev Tools</div>
         <div className="flex gap-2">

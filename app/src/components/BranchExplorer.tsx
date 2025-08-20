@@ -92,7 +92,7 @@ export function BranchExplorer({
   }
 
   return (
-    <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+    <div className="rounded-xl border border-zinc-200/80 bg-white/70 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/60">
       <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">Branch Explorer</div>
       {roots.length === 0 ? (
         <div className="rounded-lg border border-dashed border-zinc-300 p-3 text-xs text-zinc-500 dark:border-zinc-700">No branches</div>
