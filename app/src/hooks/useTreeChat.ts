@@ -23,6 +23,9 @@ export function useTreeChat() {
       transcript(): Message[] {
         return getTranscript(get(), get().activeBranchId)
       },
+      transcriptFor(id: string): Message[] {
+        return getTranscript(get(), id)
+      },
       children(): BranchNode[] {
         return getChildren(get(), get().activeBranchId)
       },
@@ -48,9 +51,10 @@ export function useTreeChat() {
         updateMessageContent(get(), id, content)
         bump()
       },
-      fork(fromMessageId: string) {
-        forkBranch(get(), fromMessageId)
+      fork(fromMessageId: string): string {
+        const n = forkBranch(get(), fromMessageId)
         bump()
+        return n.id
       },
       setActiveBranch(id: string) {
         setActiveBranch(get(), id)

@@ -20,6 +20,23 @@ function App() {
   const [showExplorer, setShowExplorer] = useState(false)
   const tree = useTreeChat()
   const path = tree.path()
+  const [openBranchIds, setOpenBranchIds] = useState<string[]>([
+    path[path.length - 1]?.id ?? tree.activeBranchId,
+  ])
+
+  function addOpenBranch(id: string, makeActive = true) {
+    setOpenBranchIds((prev) => (prev.includes(id) ? prev : [...prev, id]))
+    if (makeActive) tree.setActiveBranch(id)
+  }
+
+  function closeBranch(id: string) {
+    setOpenBranchIds((prev) => prev.filter((b) => b !== id))
+    if (tree.activeBranchId === id) {
+      // pick last remaining or fallback to root path head
+      const next = openBranchIds.filter((b) => b !== id).at(-1) ?? path[0]?.id ?? tree.activeBranchId
+      tree.setActiveBranch(next)
+    }
+  }
   const transcript = tree.transcript()
 
   async function handleSend(content: string) {
@@ -75,7 +92,7 @@ function App() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800/70 dark:bg-zinc-900/70">
-        <div className="container mx-auto flex max-w-6xl items-center justify-between p-4">
+        <div className="flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <button
               className="rounded-full bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 sm:hidden"
@@ -94,14 +111,14 @@ function App() {
         </div>
       </header>
 
-      <main className="container mx-auto max-w-6xl flex-1 p-4 sm:p-6">
+      <main className="w-full flex-1 p-4 sm:p-6">
         {showExplorer && (
           <div className="mb-4 sm:hidden">
             <BranchExplorer
               branches={tree.branches}
               activeId={tree.activeBranchId}
               onSelect={(id) => {
-                tree.setActiveBranch(id)
+                addOpenBranch(id)
                 setShowExplorer(false)
               }}
               onRename={(id, title) => tree.renameBranch(id, title)}
@@ -114,7 +131,7 @@ function App() {
             <BranchExplorer
               branches={tree.branches}
               activeId={tree.activeBranchId}
-              onSelect={(id) => tree.setActiveBranch(id)}
+              onSelect={(id) => addOpenBranch(id)}
               onRename={(id, title) => tree.renameBranch(id, title)}
             />
           </aside>
@@ -132,8 +149,43 @@ function App() {
             />
           </div>
 
-          <div className="flex-1">
-            <MessageList messages={transcript} onFork={(id) => tree.fork(id)} />
+          <div className="flex flex-col gap-4 sm:flex-row">
+            {openBranchIds.map((bid) => {
+              const t = tree.transcriptFor(bid)
+              const node = tree.branches.get(bid)
+              return (
+                <div key={bid} className="flex min-w-0 flex-1 flex-col rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <div className="truncate text-sm font-medium">{node?.title ?? 'untitled'}</div>
+                    <div className="flex items-center gap-2">
+                      {tree.activeBranchId !== bid && (
+                        <button
+                          className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                          onClick={() => tree.setActiveBranch(bid)}
+                        >
+                          Focus
+                        </button>
+                      )}
+                      <button
+                        className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        onClick={() => closeBranch(bid)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <div className="min-h-0 flex-1">
+                    <MessageList
+                      messages={t}
+                      onFork={(mid) => {
+                        const newId = tree.fork(mid)
+                        addOpenBranch(newId)
+                      }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
           <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/70">
