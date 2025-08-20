@@ -78,7 +78,7 @@ function App() {
         <div className="container mx-auto flex max-w-6xl items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <button
-              className="rounded-full bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 md:hidden"
+              className="rounded-full bg-indigo-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 sm:hidden"
               onClick={() => setShowExplorer((v) => !v)}
             >
               Branches
@@ -94,12 +94,11 @@ function App() {
         </div>
       </header>
 
-      <main className="container mx-auto max-w-6xl flex-1 p-4 md:p-6">
+      <main className="container mx-auto max-w-6xl flex-1 p-4 sm:p-6">
         {showExplorer && (
-          <div className="mb-4 md:hidden">
+          <div className="mb-4 sm:hidden">
             <BranchExplorer
-              path={path}
-              children={tree.children()}
+              branches={tree.branches}
               activeId={tree.activeBranchId}
               onSelect={(id) => {
                 tree.setActiveBranch(id)
@@ -110,22 +109,21 @@ function App() {
           </div>
         )}
 
-        <div className="md:grid md:grid-cols-[minmax(220px,280px),1fr] md:gap-6">
-          <aside className="hidden md:block">
+        <div className="sm:flex sm:gap-6">
+          <aside className="hidden sm:block sm:w-60 md:w-72 shrink-0">
             <BranchExplorer
-              path={path}
-              children={tree.children()}
+              branches={tree.branches}
               activeId={tree.activeBranchId}
               onSelect={(id) => tree.setActiveBranch(id)}
               onRename={(id, title) => tree.renameBranch(id, title)}
             />
           </aside>
-          <section className="flex min-h-[60dvh] flex-col gap-6">
-          {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 shadow-sm dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
-              {error}
-            </div>
-          )}
+          <section className="flex min-h-[60dvh] flex-1 flex-col gap-6">
+            {error && (
+              <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 shadow-sm dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
+                {error}
+              </div>
+            )}
 
           <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
             <Breadcrumbs
