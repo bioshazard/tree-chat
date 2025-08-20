@@ -71,45 +71,53 @@ function App() {
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <header className="flex items-center justify-between border-b border-zinc-200 p-3 dark:border-zinc-800">
-        <h1 className="text-lg font-semibold">TreeChat</h1>
-        <button
-          className="rounded-md border border-zinc-300 px-3 py-1 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
-          onClick={() => setOpenSettings(true)}
-        >
-          Settings
-        </button>
+    <div className="flex min-h-dvh flex-col">
+      <header className="sticky top-0 z-20 border-b border-zinc-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-zinc-800/70 dark:bg-zinc-900/70">
+        <div className="container mx-auto flex max-w-3xl items-center justify-between p-4">
+          <h1 className="text-2xl font-semibold tracking-tight">TreeChat</h1>
+          <button
+            className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+            onClick={() => setOpenSettings(true)}
+          >
+            Settings
+          </button>
+        </div>
       </header>
 
-      <main className="container mx-auto flex max-w-3xl flex-1 flex-col gap-3 p-3">
+      <main className="container mx-auto flex max-w-3xl flex-1 flex-col gap-6 p-6">
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
+          <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800 shadow-sm dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
             {error}
           </div>
         )}
 
-        <Breadcrumbs
-          path={path.map((n) => ({ id: n.id, title: n.title ?? 'untitled' }))}
-          onSelect={(id) => tree.setActiveBranch(id)}
-        />
+        <div className="rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70">
+          <Breadcrumbs
+            path={path.map((n) => ({ id: n.id, title: n.title ?? 'untitled' }))}
+            onSelect={(id) => tree.setActiveBranch(id)}
+          />
+        </div>
 
-        <MessageList messages={transcript} onFork={(id) => tree.fork(id)} />
+        <div className="flex-1">
+          <MessageList messages={transcript} onFork={(id) => tree.fork(id)} />
+        </div>
 
-        <Composer
-          onSend={handleSend}
-          busy={busy}
-          onAbort={() => {
-            abortRef.current?.abort()
-          }}
-        />
+        <div className="sticky bottom-0 z-10 -mx-2 mt-2 rounded-xl border border-zinc-200/80 bg-white/80 p-3 shadow-xl ring-1 ring-white/40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/70">
+          <Composer
+            onSend={handleSend}
+            busy={busy}
+            onAbort={() => {
+              abortRef.current?.abort()
+            }}
+          />
+        </div>
 
         <DevPanel cfg={cfg} />
       </main>
 
       {openSettings && (
         <div className="fixed inset-0 z-10 grid place-items-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-base font-semibold">Settings</h2>
               <button

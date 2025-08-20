@@ -122,26 +122,26 @@ export function DevPanel({ cfg }: { cfg: RuntimeConfig | null }) {
   }
 
   return (
-    <div className="mt-4 rounded-md border border-zinc-200 p-3 text-xs text-zinc-700 dark:border-zinc-800 dark:text-zinc-300">
+    <div className="mt-6 rounded-xl border border-zinc-200/80 bg-white/80 p-4 text-xs text-zinc-700 shadow-sm ring-1 ring-white/40 backdrop-blur dark:border-zinc-800/80 dark:bg-zinc-900/70 dark:text-zinc-300">
       <div className="mb-2 flex items-center justify-between">
-        <div className="font-medium">Dev Tools</div>
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Dev Tools</div>
         <div className="flex gap-2">
           <button
-            className="rounded-md border border-zinc-300 px-2 py-1 hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+            className="rounded-lg border border-zinc-300 bg-white/70 px-2 py-1 shadow-sm transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900/60 dark:hover:bg-zinc-800"
             onClick={testModels}
             disabled={busy}
           >
             Test /models
           </button>
           <button
-            className="rounded-md border border-zinc-300 px-2 py-1 hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+            className="rounded-lg border border-zinc-300 bg-white/70 px-2 py-1 shadow-sm transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900/60 dark:hover:bg-zinc-800"
             onClick={testChatCompletions}
             disabled={busy}
           >
             Test /chat/completions
           </button>
           <button
-            className="rounded-md border border-zinc-300 px-2 py-1 hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+            className="rounded-lg border border-zinc-300 bg-white/70 px-2 py-1 shadow-sm transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900/60 dark:hover:bg-zinc-800"
             onClick={testResponses}
             disabled={busy}
           >
@@ -149,7 +149,7 @@ export function DevPanel({ cfg }: { cfg: RuntimeConfig | null }) {
           </button>
         </div>
       </div>
-      <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded bg-zinc-50 p-2 dark:bg-zinc-950/40">{output || 'No output yet.'}</pre>
+      <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-zinc-50 p-2 ring-1 ring-inset ring-zinc-200 dark:bg-zinc-950/40 dark:ring-zinc-800">{output || 'No output yet.'}</pre>
       <div className="mt-2 text-zinc-500">
         Tip: OpenRouter requires browser headers (HTTP-Referer, X-Title); these are added automatically when base URL contains openrouter.ai
       </div>

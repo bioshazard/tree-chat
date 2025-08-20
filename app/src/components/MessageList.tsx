@@ -14,40 +14,57 @@ export function MessageList({
 }) {
   if (messages.length === 0) {
     return (
-      <div className="rounded-md border border-dashed border-zinc-300 p-8 text-center text-zinc-500 dark:border-zinc-700">
+      <div className="rounded-xl border border-dashed border-zinc-300 bg-white/60 p-10 text-center text-zinc-500 shadow-sm backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/50">
         No messages yet. Try sending one.
       </div>
     )
   }
 
   return (
-    <ol className="flex flex-col gap-3">
-      {messages.map((m) => (
-        <li key={m.id} className="group">
-          <div
-            className={
-              'flex items-start gap-3 rounded-md border p-3 ' +
-              (m.role === 'user'
-                ? 'border-blue-200/60 bg-blue-50 dark:border-blue-900/60 dark:bg-blue-950/40'
-                : 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900')
-            }
-          >
-            <div className="mt-0.5 shrink-0 text-xs font-medium uppercase tracking-wide text-zinc-500">
-              {m.role}
-            </div>
-            <div className="whitespace-pre-wrap text-sm leading-relaxed">{m.content}</div>
-            <div className="ml-auto opacity-0 transition-opacity group-hover:opacity-100">
-              <button
-                className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
-                onClick={() => onFork?.(m.id)}
-                title="Fork from here"
+    <ol className="flex flex-col gap-4">
+      {messages.map((m) => {
+        const isUser = m.role === 'user'
+        return (
+          <li key={m.id} className={`group flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+            <div className={`flex max-w-[80%] items-end gap-2`}>
+              {!isUser && (
+                <div className="flex h-7 w-7 select-none items-center justify-center rounded-full bg-indigo-600 text-[10px] font-semibold uppercase text-white">
+                  AI
+                </div>
+              )}
+              <div
+                className={
+                  'relative rounded-2xl px-4 py-2 text-sm shadow-sm ring-1 ' +
+                  (isUser
+                    ? 'bg-blue-600 text-white ring-blue-500/40'
+                    : 'bg-indigo-50 text-zinc-900 ring-indigo-100 dark:bg-zinc-800 dark:text-zinc-100 dark:ring-zinc-700')
+                }
               >
-                Fork
-              </button>
+                <div className="whitespace-pre-wrap leading-relaxed">{m.content}</div>
+                <div className="absolute -right-2 -top-2 opacity-0 transition-opacity group-hover:opacity-100">
+                  <button
+                    className={
+                      'rounded-full border px-2 py-0.5 text-[10px] font-medium shadow-sm transition ' +
+                      (isUser
+                        ? 'border-blue-400/50 bg-blue-500/20 text-white/90 hover:bg-blue-500/30'
+                        : 'border-indigo-200 bg-indigo-100/70 text-indigo-700 hover:bg-indigo-200 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300 dark:hover:bg-zinc-800')
+                    }
+                    onClick={() => onFork?.(m.id)}
+                    title="Fork from here"
+                  >
+                    Fork
+                  </button>
+                </div>
+              </div>
+              {isUser && (
+                <div className="flex h-7 w-7 select-none items-center justify-center rounded-full bg-blue-600 text-[10px] font-semibold uppercase text-white">
+                  You
+                </div>
+              )}
             </div>
-          </div>
-        </li>
-      ))}
+          </li>
+        )
+      })}
     </ol>
   )
 }
