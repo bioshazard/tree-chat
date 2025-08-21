@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Breadcrumbs } from './components/Breadcrumbs'
 import { Composer } from './components/Composer'
 import { MessageList } from './components/MessageList'
@@ -23,6 +23,14 @@ function App() {
   const [openBranchIds, setOpenBranchIds] = useState<string[]>([
     path[path.length - 1]?.id ?? tree.activeBranchId,
   ])
+
+  // Open Settings on first load if any required field is missing
+  useEffect(() => {
+    const needsConfig = !cfg?.baseUrl || !cfg?.apiKey || !cfg?.model
+    if (needsConfig) setOpenSettings(true)
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function addOpenBranch(id: string, makeActive = true) {
     setOpenBranchIds((prev) => (prev.includes(id) ? prev : [...prev, id]))
